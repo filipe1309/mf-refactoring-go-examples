@@ -45,7 +45,7 @@ type Play struct {
 }
 
 func main() {
-	invoiceFile, err := os.ReadFile("invoices.json")
+	invoiceFile, err := os.ReadFile("chapter_1/after/invoices.json")
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -114,7 +114,7 @@ func amountFor(aPerformance Performance) (int, error) {
 }
 
 func playFor(aPerformance Performance) Play {
-	playsFile, err := os.ReadFile("plays.json")
+	playsFile, err := os.ReadFile("chapter_1/after/plays.json")
 	if err != nil {
 		fmt.Println(err)
 	}

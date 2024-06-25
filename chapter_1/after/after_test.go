@@ -47,6 +47,12 @@ func TestMain(m *testing.M) {
 	// Set up the environment if necessary
 	// For example, create temporary files or set environment variables
 
+	// Change the current working directory to the root of the project
+	// so that the program can find the JSON file
+	if err := os.Chdir("../.."); err != nil {
+		panic(err)
+	}
+
 	// Run the tests
 	code := m.Run()
 
