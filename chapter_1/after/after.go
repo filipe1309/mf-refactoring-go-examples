@@ -111,6 +111,23 @@ func enrichPerformance(performance Performance) (*Performance, error) {
 	return &performance, nil
 }
 
+func renderHtml(statementData StatementData) (string, error) {
+	var result strings.Builder
+	result.WriteString(fmt.Sprintf("<h1>Statement for %s</h1>\n", statementData.Customer))
+	result.WriteString("<table>\n")
+	result.WriteString("<tr><th>play</th><th>seats</th><th>cost</th></tr>\n")
+
+	for _, perf := range statementData.Performances {
+		result.WriteString(fmt.Sprintf("<tr><td>%s</td>", perf.Play.Name))
+		result.WriteString(fmt.Sprintf("<td>%s</td>", usd(perf.Amount)))
+		result.WriteString(fmt.Sprintf("<td>%d</td></tr>\n", perf.Audience))
+		result.WriteString("</table>\n")
+	}
+	result.WriteString(fmt.Sprintf("<p>Amount owed is <em>%s</em></p>", usd(statementData.TotalAmount)))
+	result.WriteString(fmt.Sprintf("<p>You earned <em>%d</em> credits</p>\n", statementData.TotalVolumeCredits))
+	return result.String(), nil
+}
+
 func renderPlainText(statementData StatementData) (string, error) {
 	var result strings.Builder
 	result.WriteString(fmt.Sprintf("Statement for %s\n", statementData.Customer))
