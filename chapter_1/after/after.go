@@ -35,9 +35,9 @@ type Invoice struct {
 }
 
 type Performance struct {
-	PlayID   string `json:"playID"`
-	Audience int    `json:"audience"`
-  Play          Play
+	PlayID        string `json:"playID"`
+	Audience      int    `json:"audience"`
+	Play          Play
 	Amount        int
 	VolumeCredits int
 }
@@ -78,14 +78,14 @@ func usd(amount int) string {
 }
 
 func statement(invoice Invoice) (string, error) {
-  var enrichedPerformances []Performance
-  for _, perf := range invoice.Performances {
-    enrichedPerformance, err := enrichPerformance(perf)
-    if err != nil {
-      return "", err
-    }
-    enrichedPerformances = append(enrichedPerformances, *enrichedPerformance)
-  }
+	var enrichedPerformances []Performance
+	for _, perf := range invoice.Performances {
+		enrichedPerformance, err := enrichPerformance(perf)
+		if err != nil {
+			return "", err
+		}
+		enrichedPerformances = append(enrichedPerformances, *enrichedPerformance)
+	}
 	statementData := StatementData{
 		Customer:           invoice.Customer,
 		Performances:       enrichedPerformances,
@@ -96,14 +96,14 @@ func statement(invoice Invoice) (string, error) {
 }
 
 func enrichPerformance(performance Performance) (*Performance, error) {
-  performance.Play = playFor(performance)
-  amount, err := amountFor(performance)
-  if err != nil {
-    return nil, err
-  }
-  performance.Amount = amount
-  performance.VolumeCredits = volumeCreditsFor(performance)
-  return &performance, nil
+	performance.Play = playFor(performance)
+	amount, err := amountFor(performance)
+	if err != nil {
+		return nil, err
+	}
+	performance.Amount = amount
+	performance.VolumeCredits = volumeCreditsFor(performance)
+	return &performance, nil
 }
 
 func renderPlainText(statementData StatementData) (string, error) {
