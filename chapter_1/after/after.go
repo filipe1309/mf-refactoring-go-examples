@@ -68,7 +68,6 @@ func usd(amount int) string {
 }
 
 func statement(invoice Invoice) (string, error) {
-	totalAmount := 0
 	var result strings.Builder
 	result.WriteString(fmt.Sprintf("Statement for %s\n", invoice.Customer))
 
@@ -81,9 +80,7 @@ func statement(invoice Invoice) (string, error) {
 		result.WriteString(fmt.Sprintf("%s: %s (%d seats) \n", playFor(perf).Name, usd(thisAmount), perf.Audience))
 	}
 
-  totalAmount += totalAmountCalc(invoice.Performances)
-
-	result.WriteString(fmt.Sprintf("Amount owed is %s\n", usd(totalAmount)))
+	result.WriteString(fmt.Sprintf("Amount owed is %s\n", usd(totalAmount(invoice.Performances))))
 	result.WriteString(fmt.Sprintf("You earned %d credits\n", totalVolumeCredits(invoice)))
 	return result.String(), nil
 }
@@ -139,14 +136,14 @@ func totalVolumeCredits(invoice Invoice) int {
 	return result
 }
 
-func totalAmountCalc(performances []Performance) int {
-  result := 0
-  for _, perf := range performances {
-    thisAmount, err := amountFor(perf)
-    if err != nil {
-      fmt.Println(err)
-    }
-    result += thisAmount
-  }
-  return result
+func totalAmount(performances []Performance) int {
+	result := 0
+	for _, perf := range performances {
+		thisAmount, err := amountFor(perf)
+		if err != nil {
+			fmt.Println(err)
+		}
+		result += thisAmount
+	}
+	return result
 }
