@@ -91,6 +91,8 @@ Please make sure to update tests as appropriate. -->
 
 - [AlgoExpert](https://www.algoexpert.io/)
 - [ShubcoGen Template™](https://github.com/filipe1309/shubcogen-template)
+- [refactoring-go](https://github.com/Rosalita/refactoring-go)
+- [Martin Fowler's Refactoring](https://www.amazon.com/Refactoring-Improving-Existing-Addison-Wesley-Signature/dp/0134757599)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
