@@ -79,13 +79,7 @@ func statement(invoice Invoice) (string, error) {
       return "", err
     }
 
-    // add volume credits
-    volumeCredits += int(math.Max(float64(perf.Audience)-30, 0))
-
-    // add extra credit for every ten comedy attendees
-    if playFor(perf).Type == "comedy" {
-      volumeCredits += int(math.Floor(float64(perf.Audience) / 5))
-    }
+    volumeCredits += volumeCreditsFor(perf)
 
     // print line for this order
     result.WriteString(fmt.Sprintf("%s: %s (%d seats) \n", playFor(perf).Name, formatUSD(float64(thisAmount/100)), perf.Audience))
@@ -130,4 +124,13 @@ func playFor(aPerformance Performance) Play {
     fmt.Println(err)
   }
   return plays[aPerformance.PlayID]
+}
+
+func volumeCreditsFor(perf Performance) int {
+  result := int(math.Max(float64(perf.Audience)-30, 0))
+  // add extra credit for every ten comedy attendees
+  if playFor(perf).Type == "comedy" {
+    result += int(math.Floor(float64(perf.Audience) / 5))
+  }
+  return result
 }
