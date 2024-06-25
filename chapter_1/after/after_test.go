@@ -25,6 +25,20 @@ func TestMain(m *testing.M) {
 	os.Exit(code)
 }
 
+func TestTotalVolumeCredits(t *testing.T) {
+	performances := []Performance{
+		{PlayID: "hamlet", Audience: 55},
+		{PlayID: "as-like", Audience: 35},
+		{PlayID: "othello", Audience: 40},
+	}
+
+	expected := 47
+	result := totalVolumeCredits(performances)
+	if result != expected {
+		t.Errorf("expected %v but got %v", expected, result)
+	}
+}
+
 func TestVolumeCreditsFor(t *testing.T) {
 	performance := Performance{PlayID: "hamlet", Audience: 55}
 	expected := 25
