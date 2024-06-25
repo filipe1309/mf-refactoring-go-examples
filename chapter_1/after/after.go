@@ -75,13 +75,25 @@ func usd(amount int) string {
 }
 
 func statement(invoice Invoice) (string, error) {
+  var enrichedPerformances []Performance
+  for _, perf := range invoice.Performances {
+    enrichedPerformance, err := enrichPerformance(perf)
+    if err != nil {
+      return "", err
+    }
+    enrichedPerformances = append(enrichedPerformances, *enrichedPerformance)
+  }
 	statementData := StatementData{
 		Customer:           invoice.Customer,
-		Performances:       invoice.Performances,
+		Performances:       enrichedPerformances,
 		TotalAmount:        totalAmount(invoice.Performances),
 		TotalVolumeCredits: totalVolumeCredits(invoice.Performances),
 	}
 	return renderPlainText(statementData)
+}
+
+func enrichPerformance(performance Performance) (*Performance, error) {
+  return &performance, nil
 }
 
 func renderPlainText(statementData StatementData) (string, error) {
