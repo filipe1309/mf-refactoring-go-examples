@@ -37,6 +37,9 @@ type Invoice struct {
 type Performance struct {
 	PlayID   string `json:"playID"`
 	Audience int    `json:"audience"`
+  Play          Play
+	Amount        int
+	VolumeCredits int
 }
 
 type Play struct {
@@ -93,6 +96,13 @@ func statement(invoice Invoice) (string, error) {
 }
 
 func enrichPerformance(performance Performance) (*Performance, error) {
+  performance.Play = playFor(performance)
+  amount, err := amountFor(performance)
+  if err != nil {
+    return nil, err
+  }
+  performance.Amount = amount
+  performance.VolumeCredits = volumeCreditsFor(performance)
   return &performance, nil
 }
 
