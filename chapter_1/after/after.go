@@ -81,7 +81,7 @@ func statement(invoice Invoice) (string, error) {
 	}
 
 	result.WriteString(fmt.Sprintf("Amount owed is %s\n", usd(totalAmount(invoice.Performances))))
-	result.WriteString(fmt.Sprintf("You earned %d credits\n", totalVolumeCredits(invoice)))
+	result.WriteString(fmt.Sprintf("You earned %d credits\n", totalVolumeCredits(invoice.Performances)))
 	return result.String(), nil
 }
 
@@ -128,9 +128,9 @@ func volumeCreditsFor(aPerformance Performance) int {
 	return result
 }
 
-func totalVolumeCredits(invoice Invoice) int {
+func totalVolumeCredits(performances []Performance) int {
 	result := 0
-	for _, perf := range invoice.Performances {
+	for _, perf := range performances {
 		result += volumeCreditsFor(perf)
 	}
 	return result
