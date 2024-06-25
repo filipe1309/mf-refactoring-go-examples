@@ -111,16 +111,11 @@ func renderPlainText(statementData StatementData) (string, error) {
 	result.WriteString(fmt.Sprintf("Statement for %s\n", statementData.Customer))
 
 	for _, perf := range statementData.Performances {
-		// print line for this order
-		thisAmount, err := amountFor(perf)
-		if err != nil {
-			return "", err
-		}
-		result.WriteString(fmt.Sprintf("%s: %s (%d seats) \n", playFor(perf).Name, usd(thisAmount), perf.Audience))
+		result.WriteString(fmt.Sprintf("%s: %s (%d seats) \n", perf.Play.Name, usd(perf.Amount), perf.Audience))
 	}
 
-	result.WriteString(fmt.Sprintf("Amount owed is %s\n", usd(totalAmount(statementData.Performances))))
-	result.WriteString(fmt.Sprintf("You earned %d credits\n", totalVolumeCredits(statementData.Performances)))
+	result.WriteString(fmt.Sprintf("Amount owed is %s\n", usd(statementData.TotalAmount)))
+	result.WriteString(fmt.Sprintf("You earned %d credits\n", statementData.TotalVolumeCredits))
 	return result.String(), nil
 }
 
