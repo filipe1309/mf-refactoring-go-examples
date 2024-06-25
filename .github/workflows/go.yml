@@ -25,7 +25,9 @@ jobs:
     - name: Display Go version
       run: go version
     - name: Install dependencies
-      run: go get .
+      run: |
+        go get .
+        go get golang.org/x/text/currency
     - name: Build
       run: go build -v ./...
 
