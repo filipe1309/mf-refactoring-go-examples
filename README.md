@@ -42,20 +42,22 @@ cd mf-refactoring-go-examples
 ## :runner: Running
 
 ```sh
-make run
+make run CHAPTER_NUM=1
 ```
-
-> Access http://localhost
+> Replace `CHAPTER_NUM` value with the desired chapter number
+> Verify the result in the terminal
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-<!-- ## :white_check_mark: Tests
-
-After up the container:
+## :white_check_mark: Tests
 
 ```sh
-docker-compose exec -t {{ CONTAINER_SERVICE_NAME }} ./vendor/bin/phpunit
+make test
 ```
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- 
 
 ## Contributing
 
