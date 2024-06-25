@@ -44,6 +44,13 @@ type Play struct {
 	Type string `json:"type"`
 }
 
+type StatementData struct {
+	Customer           string
+	Performances       []Performance
+	TotalAmount        int
+	TotalVolumeCredits int
+}
+
 func main() {
 	invoiceFile, err := os.ReadFile("chapter_1/after/invoices.json")
 	if err != nil {
@@ -68,14 +75,20 @@ func usd(amount int) string {
 }
 
 func statement(invoice Invoice) (string, error) {
-	return renderPlainText(invoice)
+	statementData := StatementData{
+		Customer:           invoice.Customer,
+		Performances:       invoice.Performances,
+		TotalAmount:        totalAmount(invoice.Performances),
+		TotalVolumeCredits: totalVolumeCredits(invoice.Performances),
+	}
+	return renderPlainText(statementData)
 }
 
-func renderPlainText(invoice Invoice) (string, error) {
-  var result strings.Builder
-	result.WriteString(fmt.Sprintf("Statement for %s\n", invoice.Customer))
+func renderPlainText(statementData StatementData) (string, error) {
+	var result strings.Builder
+	result.WriteString(fmt.Sprintf("Statement for %s\n", statementData.Customer))
 
-	for _, perf := range invoice.Performances {
+	for _, perf := range statementData.Performances {
 		// print line for this order
 		thisAmount, err := amountFor(perf)
 		if err != nil {
@@ -84,8 +97,8 @@ func renderPlainText(invoice Invoice) (string, error) {
 		result.WriteString(fmt.Sprintf("%s: %s (%d seats) \n", playFor(perf).Name, usd(thisAmount), perf.Audience))
 	}
 
-	result.WriteString(fmt.Sprintf("Amount owed is %s\n", usd(totalAmount(invoice.Performances))))
-	result.WriteString(fmt.Sprintf("You earned %d credits\n", totalVolumeCredits(invoice.Performances)))
+	result.WriteString(fmt.Sprintf("Amount owed is %s\n", usd(totalAmount(statementData.Performances))))
+	result.WriteString(fmt.Sprintf("You earned %d credits\n", totalVolumeCredits(statementData.Performances)))
 	return result.String(), nil
 }
 
