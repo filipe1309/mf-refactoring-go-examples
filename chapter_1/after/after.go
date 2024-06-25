@@ -126,11 +126,10 @@ func playFor(aPerformance Performance) Play {
   return plays[aPerformance.PlayID]
 }
 
-func volumeCreditsFor(perf Performance) int {
-  result := int(math.Max(float64(perf.Audience)-30, 0))
-  // add extra credit for every ten comedy attendees
-  if playFor(perf).Type == "comedy" {
-    result += int(math.Floor(float64(perf.Audience) / 5))
+func volumeCreditsFor(aPerformance Performance) int {
+  result := int(math.Max(float64(aPerformance.Audience)-30, 0))
+  if playFor(aPerformance).Type == "comedy" {
+    result += int(math.Floor(float64(aPerformance.Audience) / 5))
   }
   return result
 }
