@@ -72,6 +72,34 @@ func TestAmountFor(t *testing.T) {
 	}
 }
 
+func TestStatementHtml(t *testing.T) {
+	invoice := Invoice{
+		Customer:     "BigCo",
+		Performances: performances,
+	}
+
+	expectedOutput := `<h1>Statement for BigCo</h1>
+<table>
+<tr><th>play</th><th>seats</th><th>cost</th></tr>
+<tr><td>Hamlet</td><td>USD 650.00</td><td>55</td></tr>
+</table>
+<tr><td>As You Like It</td><td>USD 580.00</td><td>35</td></tr>
+</table>
+<tr><td>Othello</td><td>USD 500.00</td><td>40</td></tr>
+</table>
+<p>Amount owed is <em>USD 1,730.00</em></p><p>You earned <em>47</em> credits</p>
+`
+
+	result, err := statementHtml(invoice)
+	if err != nil {
+		t.Fatalf("statementHtml() returned an error: %v", err)
+	}
+
+	if result != expectedOutput {
+		t.Errorf("expected %q but got %q", expectedOutput, result)
+	}
+}
+
 func TestStatement(t *testing.T) {
 	invoice := Invoice{
 		Customer:     "BigCo",

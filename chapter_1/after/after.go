@@ -71,6 +71,13 @@ func main() {
 	}
 
 	fmt.Println(result)
+
+	resultHtml, err := statementHtml(invoice)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	fmt.Println(resultHtml)
 }
 
 func usd(amount int) string {
