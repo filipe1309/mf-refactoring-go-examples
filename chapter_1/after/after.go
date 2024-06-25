@@ -86,13 +86,18 @@ func statement(invoice Invoice) (string, error) {
 		}
 		enrichedPerformances = append(enrichedPerformances, *enrichedPerformance)
 	}
+
+	return renderPlainText(createStatementData(invoice, enrichedPerformances))
+}
+
+func createStatementData(invoice Invoice, enrichedPerformances []Performance) StatementData {
 	statementData := StatementData{
 		Customer:           invoice.Customer,
 		Performances:       enrichedPerformances,
 		TotalAmount:        totalAmount(invoice.Performances),
 		TotalVolumeCredits: totalVolumeCredits(invoice.Performances),
 	}
-	return renderPlainText(statementData)
+	return statementData
 }
 
 func enrichPerformance(performance Performance) (*Performance, error) {
