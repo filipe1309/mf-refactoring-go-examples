@@ -44,10 +44,6 @@ type Play struct {
   Type string `json:"type"`
 }
 
-func usd(amount int) string {
-  return fmt.Sprintf("%+v", currency.USD.Amount(amount/100))
-}
-
 func main() {
   invoiceFile, err := os.ReadFile("invoices.json")
   if err != nil {
@@ -65,6 +61,10 @@ func main() {
   }
 
   fmt.Println(result)
+}
+
+func usd(amount int) string {
+  return fmt.Sprintf("%+v", currency.USD.Amount(amount/100))
 }
 
 func statement(invoice Invoice) (string, error) {
