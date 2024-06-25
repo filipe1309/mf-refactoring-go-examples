@@ -44,3 +44,4 @@ Any fool can write code that a computer can understand. Good programmers write c
 https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-go
 
 
+Therefore, my general advice about performance is: first make it right, then make it fast. - Brian Kernighan

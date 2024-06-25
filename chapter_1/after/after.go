@@ -131,9 +131,9 @@ func volumeCreditsFor(aPerformance Performance) int {
 }
 
 func totalVolumeCredits(invoice Invoice) int {
-	volumeCredits := 0
+	result := 0
 	for _, perf := range invoice.Performances {
-		volumeCredits += volumeCreditsFor(perf)
+		result += volumeCreditsFor(perf)
 	}
-	return volumeCredits
+	return result
 }
