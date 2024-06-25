@@ -41,3 +41,6 @@ Refactoring changes the program in small steps in a way that if you make a mista
 Any fool can write code that a computer can understand. Good programmers write code that humans can understand
 
 
+https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-go
+
+
