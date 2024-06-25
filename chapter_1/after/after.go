@@ -102,7 +102,7 @@ func createStatementData(invoice Invoice) StatementData {
 	statementData := StatementData{
 		Customer:           invoice.Customer,
 		Performances:       enrichedPerformances,
-		TotalAmount:        totalAmount(invoice.Performances),
+		TotalAmount:        totalAmount(enrichedPerformances),
 		TotalVolumeCredits: totalVolumeCredits(invoice.Performances),
 	}
 	return statementData
@@ -155,7 +155,7 @@ func renderPlainText(statementData StatementData) (string, error) {
 
 func amountFor(aPerformance Performance) (int, error) {
 	var result int
-	switch playFor(aPerformance).Type {
+	switch aPerformance.Play.Type {
 	case "tragedy":
 		result = 40000
 		if aPerformance.Audience > 30 {
@@ -169,7 +169,7 @@ func amountFor(aPerformance Performance) (int, error) {
 		result += 300 * aPerformance.Audience
 
 	default:
-		return result, fmt.Errorf("error unknown performance type %s", playFor(aPerformance).Type)
+		return result, fmt.Errorf("error unknown performance type %s", aPerformance.Play.Type)
 	}
 
 	return result, nil

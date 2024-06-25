@@ -25,12 +25,14 @@ func TestMain(m *testing.M) {
 }
 
 var performances = []Performance{
-	{PlayID: "hamlet", Audience: 55},
-	{PlayID: "as-like", Audience: 35},
-	{PlayID: "othello", Audience: 40},
+	{PlayID: "hamlet", Audience: 55, Play: Play{Name: "Hamlet", Type: "tragedy"}},
+	{PlayID: "as-like", Audience: 35, Play: Play{Name: "As You Like It", Type: "comedy"}},
+	{PlayID: "othello", Audience: 40, Play: Play{Name: "Othello", Type: "tragedy"}},
 }
 
-var aPerformance = Performance{PlayID: "hamlet", Audience: 55}
+var aPerformance = Performance{
+	PlayID: "hamlet", Audience: 55, Play: Play{Name: "Hamlet", Type: "tragedy"},
+}
 
 func TestTotalAmount(t *testing.T) {
 	expected := 173000
