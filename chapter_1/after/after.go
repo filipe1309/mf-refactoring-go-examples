@@ -109,20 +109,20 @@ func statement(invoice Invoice, plays map[string]Play) (string, error) {
   return result.String(), nil
 }
 
-func amountFor(perf Performance, play Play) (int, error) {
+func amountFor(aPerformance Performance, play Play) (int, error) {
   var result int
   switch play.Type {
     case "tragedy":
       result = 40000
-      if perf.Audience > 30 {
-        result += 1000 * (perf.Audience - 30)
+      if aPerformance.Audience > 30 {
+        result += 1000 * (aPerformance.Audience - 30)
       }
     case "comedy":
       result = 30000
-      if perf.Audience > 20 {
-        result += 10000 + 500*(perf.Audience-20)
+      if aPerformance.Audience > 20 {
+        result += 10000 + 500*(aPerformance.Audience-20)
       }
-      result += 300 * perf.Audience
+      result += 300 * aPerformance.Audience
 
     default:
       return result, fmt.Errorf("error: unknown performance type %s", play.Type)
