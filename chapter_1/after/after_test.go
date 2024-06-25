@@ -17,12 +17,6 @@ func TestAmountFor(t *testing.T) {
 }
 
 func TestStatement(t *testing.T) {
-    plays := map[string]Play{
-        "hamlet":   {Name: "Hamlet", Type: "tragedy"},
-        "as-like":  {Name: "As You Like It", Type: "comedy"},
-        "othello":  {Name: "Othello", Type: "tragedy"},
-    }
-
     invoice := Invoice{
         Customer: "BigCo",
         Performances: []Performance{
@@ -40,7 +34,7 @@ Amount owed is USD 1,730.00
 You earned 47 credits
 `
 
-    result, err := statement(invoice, plays)
+    result, err := statement(invoice)
     if err != nil {
         t.Fatalf("statement() returned an error: %v", err)
     }
@@ -64,10 +58,6 @@ func TestMain(m *testing.M) {
 }
 
 func TestUnknownPlayType(t *testing.T) {
-    plays := map[string]Play{
-        "unknown": {Name: "Unknown Play", Type: "unknown"},
-    }
-
     invoice := Invoice{
         Customer: "BigCo",
         Performances: []Performance{
@@ -75,7 +65,7 @@ func TestUnknownPlayType(t *testing.T) {
         },
     }
 
-    _, err := statement(invoice, plays)
+    _, err := statement(invoice)
     if err == nil {
         t.Fatalf("expected an error but got nil")
     }

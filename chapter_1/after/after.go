@@ -49,16 +49,6 @@ func formatUSD(amount float64) string {
 }
 
 func main() {
-  playsFile, err := os.ReadFile("plays.json")
-  if err != nil {
-    fmt.Println(err)
-  }
-
-  var plays map[string]Play
-  if err := json.Unmarshal(playsFile, &plays); err != nil {
-    fmt.Println(err)
-  }
-
   invoiceFile, err := os.ReadFile("invoices.json")
   if err != nil {
     fmt.Println(err)
@@ -69,7 +59,7 @@ func main() {
     fmt.Println(err)
   }
 
-  result, err := statement(invoice, plays)
+  result, err := statement(invoice)
   if err != nil {
     fmt.Println(err)
   }
@@ -77,14 +67,14 @@ func main() {
   fmt.Println(result)
 }
 
-func statement(invoice Invoice, plays map[string]Play) (string, error) {
+func statement(invoice Invoice) (string, error) {
   totalAmount := 0
   volumeCredits := 0
   var result strings.Builder
   result.WriteString(fmt.Sprintf("Statement for %s\n", invoice.Customer))
 
   for _, perf := range invoice.Performances {
-    play := plays[perf.PlayID]
+    play := playFor(perf)
 
     thisAmount, err := amountFor(perf, play)
     if err != nil {
@@ -129,4 +119,17 @@ func amountFor(aPerformance Performance, play Play) (int, error) {
   }
 
   return result, nil
+}
+
+func playFor(aPerformance Performance) Play {
+  playsFile, err := os.ReadFile("plays.json")
+  if err != nil {
+    fmt.Println(err)
+  }
+
+  var plays map[string]Play
+  if err := json.Unmarshal(playsFile, &plays); err != nil {
+    fmt.Println(err)
+  }
+  return plays[aPerformance.PlayID]
 }
