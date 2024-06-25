@@ -25,13 +25,15 @@ func TestMain(m *testing.M) {
 	os.Exit(code)
 }
 
-func TestTotalAmount(t *testing.T) {
-	performances := []Performance{
-		{PlayID: "hamlet", Audience: 55},
-		{PlayID: "as-like", Audience: 35},
-		{PlayID: "othello", Audience: 40},
-	}
+var performances = []Performance{
+	{PlayID: "hamlet", Audience: 55},
+	{PlayID: "as-like", Audience: 35},
+	{PlayID: "othello", Audience: 40},
+}
 
+var aPerformance = Performance{PlayID: "hamlet", Audience: 55}
+
+func TestTotalAmount(t *testing.T) {
 	expected := 173000
 	result := totalAmount(performances)
 	if result != expected {
@@ -40,12 +42,6 @@ func TestTotalAmount(t *testing.T) {
 }
 
 func TestTotalVolumeCredits(t *testing.T) {
-	performances := []Performance{
-		{PlayID: "hamlet", Audience: 55},
-		{PlayID: "as-like", Audience: 35},
-		{PlayID: "othello", Audience: 40},
-	}
-
 	expected := 47
 	result := totalVolumeCredits(performances)
 	if result != expected {
@@ -54,27 +50,24 @@ func TestTotalVolumeCredits(t *testing.T) {
 }
 
 func TestVolumeCreditsFor(t *testing.T) {
-	performance := Performance{PlayID: "hamlet", Audience: 55}
 	expected := 25
-	result := volumeCreditsFor(performance)
+	result := volumeCreditsFor(aPerformance)
 	if result != expected {
 		t.Errorf("expected %v but got %v", expected, result)
 	}
 }
 
 func TestPlayFor(t *testing.T) {
-	perf := Performance{PlayID: "hamlet", Audience: 55}
 	expected := "Hamlet"
-	result := playFor(perf)
+	result := playFor(aPerformance)
 	if result.Name != expected {
 		t.Errorf("expected %v but got %v", expected, result)
 	}
 }
 
 func TestAmountFor(t *testing.T) {
-	performance := Performance{PlayID: "hamlet", Audience: 55}
 	expected := 65000
-	result, _ := amountFor(performance)
+	result, _ := amountFor(aPerformance)
 	if result != expected {
 		t.Errorf("expected %v but got %v", expected, result)
 	}
@@ -82,12 +75,8 @@ func TestAmountFor(t *testing.T) {
 
 func TestStatement(t *testing.T) {
 	invoice := Invoice{
-		Customer: "BigCo",
-		Performances: []Performance{
-			{PlayID: "hamlet", Audience: 55},
-			{PlayID: "as-like", Audience: 35},
-			{PlayID: "othello", Audience: 40},
-		},
+		Customer:     "BigCo",
+		Performances: performances,
 	}
 
 	expectedOutput := `Statement for BigCo
