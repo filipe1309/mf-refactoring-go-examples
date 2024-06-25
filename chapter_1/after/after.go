@@ -74,16 +74,17 @@ func statement(invoice Invoice) (string, error) {
 	result.WriteString(fmt.Sprintf("Statement for %s\n", invoice.Customer))
 
 	for _, perf := range invoice.Performances {
+		// print line for this order
 		thisAmount, err := amountFor(perf)
 		if err != nil {
 			return "", err
 		}
-
-		volumeCredits += volumeCreditsFor(perf)
-
-		// print line for this order
-		result.WriteString(fmt.Sprintf("%s: %s (%d seats) \n", playFor(perf).Name, usd(thisAmount), perf.Audience))
+    result.WriteString(fmt.Sprintf("%s: %s (%d seats) \n", playFor(perf).Name, usd(thisAmount), perf.Audience))
 		totalAmount += thisAmount
+	}
+
+  for _, perf := range invoice.Performances {
+		volumeCredits += volumeCreditsFor(perf)
 	}
 
 	result.WriteString(fmt.Sprintf("Amount owed is %s\n", usd(totalAmount)))
