@@ -39,3 +39,5 @@ The essence of the process of refactoring: small steps and tests after each step
 Refactoring changes the program in small steps in a way that if you make a mistake, you can easily find it
 
 Any fool can write code that a computer can understand. Good programmers write code that humans can understand
+
+

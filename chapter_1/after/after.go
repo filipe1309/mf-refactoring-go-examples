@@ -44,8 +44,8 @@ type Play struct {
   Type string `json:"type"`
 }
 
-func usd(amount float64) string {
-  return fmt.Sprintf("%+v", currency.USD.Amount(amount))
+func usd(amount int) string {
+  return fmt.Sprintf("%+v", currency.USD.Amount(amount/100))
 }
 
 func main() {
@@ -82,11 +82,11 @@ func statement(invoice Invoice) (string, error) {
     volumeCredits += volumeCreditsFor(perf)
 
     // print line for this order
-    result.WriteString(fmt.Sprintf("%s: %s (%d seats) \n", playFor(perf).Name, usd(float64(thisAmount/100)), perf.Audience))
+    result.WriteString(fmt.Sprintf("%s: %s (%d seats) \n", playFor(perf).Name, usd(thisAmount), perf.Audience))
     totalAmount += thisAmount
   }
 
-  result.WriteString(fmt.Sprintf("Amount owed is %s\n", usd(float64(totalAmount)/100)))
+  result.WriteString(fmt.Sprintf("Amount owed is %s\n", usd(totalAmount)))
   result.WriteString(fmt.Sprintf("You earned %d credits\n", volumeCredits))
   return result.String(), nil
 }
