@@ -74,7 +74,7 @@ func statement(invoice Invoice) (string, error) {
   result.WriteString(fmt.Sprintf("Statement for %s\n", invoice.Customer))
 
   for _, perf := range invoice.Performances {
-    thisAmount, err := amountFor(perf, playFor(perf))
+    thisAmount, err := amountFor(perf)
     if err != nil {
       return "", err
     }
@@ -97,7 +97,7 @@ func statement(invoice Invoice) (string, error) {
   return result.String(), nil
 }
 
-func amountFor(aPerformance Performance, play Play) (int, error) {
+func amountFor(aPerformance Performance) (int, error) {
   var result int
   switch playFor(aPerformance).Type {
     case "tragedy":
