@@ -45,3 +45,5 @@ https://docs.github.com/en/actions/automating-builds-and-tests/building-and-test
 
 
 Therefore, my general advice about performance is: first make it right, then make it fast. - Brian Kernighan
+
+When programming, follow the camp rule: Always leave the code cleaner than you found it
