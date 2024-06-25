@@ -99,7 +99,7 @@ func statement(invoice Invoice) (string, error) {
 
 func amountFor(aPerformance Performance, play Play) (int, error) {
   var result int
-  switch play.Type {
+  switch playFor(aPerformance).Type {
     case "tragedy":
       result = 40000
       if aPerformance.Audience > 30 {
@@ -113,7 +113,7 @@ func amountFor(aPerformance Performance, play Play) (int, error) {
       result += 300 * aPerformance.Audience
 
     default:
-      return result, fmt.Errorf("error: unknown performance type %s", play.Type)
+      return result, fmt.Errorf("error: unknown performance type %s", playFor(aPerformance).Type)
   }
 
   return result, nil
