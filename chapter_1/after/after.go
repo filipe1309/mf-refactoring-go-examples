@@ -21,115 +21,115 @@
 package main
 
 import (
-  "encoding/json"
-  "fmt"
-  "golang.org/x/text/currency"
-  "math"
-  "os"
-  "strings"
+	"encoding/json"
+	"fmt"
+	"golang.org/x/text/currency"
+	"math"
+	"os"
+	"strings"
 )
 
 type Invoice struct {
-  Customer     string        `json:"customer"`
-  Performances []Performance `json:"performances"`
+	Customer     string        `json:"customer"`
+	Performances []Performance `json:"performances"`
 }
 
 type Performance struct {
-  PlayID   string `json:"playID"`
-  Audience int    `json:"audience"`
+	PlayID   string `json:"playID"`
+	Audience int    `json:"audience"`
 }
 
 type Play struct {
-  Name string `json:"name"`
-  Type string `json:"type"`
+	Name string `json:"name"`
+	Type string `json:"type"`
 }
 
 func main() {
-  invoiceFile, err := os.ReadFile("invoices.json")
-  if err != nil {
-    fmt.Println(err)
-  }
+	invoiceFile, err := os.ReadFile("invoices.json")
+	if err != nil {
+		fmt.Println(err)
+	}
 
-  var invoice Invoice
-  if err := json.Unmarshal(invoiceFile, &invoice); err != nil {
-    fmt.Println(err)
-  }
+	var invoice Invoice
+	if err := json.Unmarshal(invoiceFile, &invoice); err != nil {
+		fmt.Println(err)
+	}
 
-  result, err := statement(invoice)
-  if err != nil {
-    fmt.Println(err)
-  }
+	result, err := statement(invoice)
+	if err != nil {
+		fmt.Println(err)
+	}
 
-  fmt.Println(result)
+	fmt.Println(result)
 }
 
 func usd(amount int) string {
-  return fmt.Sprintf("%+v", currency.USD.Amount(amount/100))
+	return fmt.Sprintf("%+v", currency.USD.Amount(amount/100))
 }
 
 func statement(invoice Invoice) (string, error) {
-  totalAmount := 0
-  volumeCredits := 0
-  var result strings.Builder
-  result.WriteString(fmt.Sprintf("Statement for %s\n", invoice.Customer))
+	totalAmount := 0
+	volumeCredits := 0
+	var result strings.Builder
+	result.WriteString(fmt.Sprintf("Statement for %s\n", invoice.Customer))
 
-  for _, perf := range invoice.Performances {
-    thisAmount, err := amountFor(perf)
-    if err != nil {
-      return "", err
-    }
+	for _, perf := range invoice.Performances {
+		thisAmount, err := amountFor(perf)
+		if err != nil {
+			return "", err
+		}
 
-    volumeCredits += volumeCreditsFor(perf)
+		volumeCredits += volumeCreditsFor(perf)
 
-    // print line for this order
-    result.WriteString(fmt.Sprintf("%s: %s (%d seats) \n", playFor(perf).Name, usd(thisAmount), perf.Audience))
-    totalAmount += thisAmount
-  }
+		// print line for this order
+		result.WriteString(fmt.Sprintf("%s: %s (%d seats) \n", playFor(perf).Name, usd(thisAmount), perf.Audience))
+		totalAmount += thisAmount
+	}
 
-  result.WriteString(fmt.Sprintf("Amount owed is %s\n", usd(totalAmount)))
-  result.WriteString(fmt.Sprintf("You earned %d credits\n", volumeCredits))
-  return result.String(), nil
+	result.WriteString(fmt.Sprintf("Amount owed is %s\n", usd(totalAmount)))
+	result.WriteString(fmt.Sprintf("You earned %d credits\n", volumeCredits))
+	return result.String(), nil
 }
 
 func amountFor(aPerformance Performance) (int, error) {
-  var result int
-  switch playFor(aPerformance).Type {
-    case "tragedy":
-      result = 40000
-      if aPerformance.Audience > 30 {
-        result += 1000 * (aPerformance.Audience - 30)
-      }
-    case "comedy":
-      result = 30000
-      if aPerformance.Audience > 20 {
-        result += 10000 + 500*(aPerformance.Audience-20)
-      }
-      result += 300 * aPerformance.Audience
+	var result int
+	switch playFor(aPerformance).Type {
+	case "tragedy":
+		result = 40000
+		if aPerformance.Audience > 30 {
+			result += 1000 * (aPerformance.Audience - 30)
+		}
+	case "comedy":
+		result = 30000
+		if aPerformance.Audience > 20 {
+			result += 10000 + 500*(aPerformance.Audience-20)
+		}
+		result += 300 * aPerformance.Audience
 
-    default:
-      return result, fmt.Errorf("error: unknown performance type %s", playFor(aPerformance).Type)
-  }
+	default:
+		return result, fmt.Errorf("error: unknown performance type %s", playFor(aPerformance).Type)
+	}
 
-  return result, nil
+	return result, nil
 }
 
 func playFor(aPerformance Performance) Play {
-  playsFile, err := os.ReadFile("plays.json")
-  if err != nil {
-    fmt.Println(err)
-  }
+	playsFile, err := os.ReadFile("plays.json")
+	if err != nil {
+		fmt.Println(err)
+	}
 
-  var plays map[string]Play
-  if err := json.Unmarshal(playsFile, &plays); err != nil {
-    fmt.Println(err)
-  }
-  return plays[aPerformance.PlayID]
+	var plays map[string]Play
+	if err := json.Unmarshal(playsFile, &plays); err != nil {
+		fmt.Println(err)
+	}
+	return plays[aPerformance.PlayID]
 }
 
 func volumeCreditsFor(aPerformance Performance) int {
-  result := int(math.Max(float64(aPerformance.Audience)-30, 0))
-  if playFor(aPerformance).Type == "comedy" {
-    result += int(math.Floor(float64(aPerformance.Audience) / 5))
-  }
-  return result
+	result := int(math.Max(float64(aPerformance.Audience)-30, 0))
+	if playFor(aPerformance).Type == "comedy" {
+		result += int(math.Floor(float64(aPerformance.Audience) / 5))
+	}
+	return result
 }
