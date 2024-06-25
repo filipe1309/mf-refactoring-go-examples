@@ -2,6 +2,8 @@
 
 > notes taken during the course
 
+## Setup
+
 ```bash
 go mod init github.com/filipe1309/mf-refactoring-go-examples
 ```
@@ -21,6 +23,8 @@ go test
 
 ## Chapter 1
 
+Refactoring change the internal structure of the code without changing its external behavior
+
 ```bash
 go mod init github.com/filipe1309/mf-refactoring-go-examples/chapter_1
 go mod tidy
@@ -30,5 +34,8 @@ go mod tidy
 go run before.go
 ```
 
-```bash
+The essence of the process of refactoring: small steps and tests after each step to ensure that the code is still working
+
+Refactoring changes the program in small steps in a way that if you make a mistake, you can easily find it
+
 
