@@ -2,7 +2,6 @@ package main
 
 import (
 	"os"
-	"strings"
 	"testing"
 )
 
@@ -105,12 +104,12 @@ func TestUnknownPlayType(t *testing.T) {
 		},
 	}
 
-	_, err := statement(invoice)
-	if err == nil {
-		t.Fatalf("expected an error but got nil")
-	}
+	defer func() {
+		if r := recover(); r == nil {
+			t.Errorf("The code did not panic")
+		}
+	}()
 
-	if !strings.Contains(err.Error(), "unknown performance type") {
-		t.Errorf("expected error message to contain 'unknown performance type' but got %v", err.Error())
-	}
+	// panic expected
+	statement(invoice)
 }

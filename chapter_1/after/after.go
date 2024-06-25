@@ -78,21 +78,16 @@ func usd(amount int) string {
 }
 
 func statement(invoice Invoice) (string, error) {
-	statementData, err := createStatementData(invoice)
-	if err != nil {
-		fmt.Println(err)
-		return "", err
-	}
-	return renderPlainText(statementData)
+	return renderPlainText(createStatementData(invoice))
 }
 
-func createStatementData(invoice Invoice) (StatementData, error) {
+func createStatementData(invoice Invoice) StatementData {
 	var enrichedPerformances []Performance
 	for _, perf := range invoice.Performances {
 		enrichedPerformance, err := enrichPerformance(perf)
 		if err != nil {
 			fmt.Println(err)
-			return StatementData{}, err
+			panic(err)
 		}
 		enrichedPerformances = append(enrichedPerformances, *enrichedPerformance)
 	}
@@ -103,7 +98,7 @@ func createStatementData(invoice Invoice) (StatementData, error) {
 		TotalAmount:        totalAmount(invoice.Performances),
 		TotalVolumeCredits: totalVolumeCredits(invoice.Performances),
 	}
-	return statementData, nil
+	return statementData
 }
 
 func enrichPerformance(performance Performance) (*Performance, error) {
@@ -118,12 +113,7 @@ func enrichPerformance(performance Performance) (*Performance, error) {
 }
 
 func statementHtml(invoice Invoice) (string, error) {
-	statementData, err := createStatementData(invoice)
-	if err != nil {
-		fmt.Println(err)
-		return "", err
-	}
-	return renderHtml(statementData)
+	return renderHtml(createStatementData(invoice))
 }
 
 func renderHtml(statementData StatementData) (string, error) {
@@ -172,7 +162,7 @@ func amountFor(aPerformance Performance) (int, error) {
 		result += 300 * aPerformance.Audience
 
 	default:
-		return result, fmt.Errorf("error: unknown performance type %s", playFor(aPerformance).Type)
+		return result, fmt.Errorf("error unknown performance type %s", playFor(aPerformance).Type)
 	}
 
 	return result, nil
