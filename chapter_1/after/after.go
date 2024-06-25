@@ -68,7 +68,11 @@ func usd(amount int) string {
 }
 
 func statement(invoice Invoice) (string, error) {
-	var result strings.Builder
+	return renderPlainText(invoice)
+}
+
+func renderPlainText(invoice Invoice) (string, error) {
+  var result strings.Builder
 	result.WriteString(fmt.Sprintf("Statement for %s\n", invoice.Customer))
 
 	for _, perf := range invoice.Performances {
