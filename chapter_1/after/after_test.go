@@ -6,6 +6,16 @@ import (
     "strings"
 )
 
+func TestAmountFor(t *testing.T) {
+		performance := Performance{PlayID: "hamlet", Audience: 55}
+		play := Play{Name: "Hamlet", Type: "tragedy"}
+		expected := 65000
+		result, _ := amountFor(performance, play)
+		if result != expected {
+				t.Errorf("expected %v but got %v", expected, result)
+		}
+}
+
 func TestStatement(t *testing.T) {
     plays := map[string]Play{
         "hamlet":   {Name: "Hamlet", Type: "tragedy"},
