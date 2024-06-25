@@ -117,6 +117,15 @@ func enrichPerformance(performance Performance) (*Performance, error) {
 	return &performance, nil
 }
 
+func statementHtml(invoice Invoice) (string, error) {
+	statementData, err := createStatementData(invoice)
+	if err != nil {
+		fmt.Println(err)
+		return "", err
+	}
+	return renderHtml(statementData)
+}
+
 func renderHtml(statementData StatementData) (string, error) {
 	var result strings.Builder
 	result.WriteString(fmt.Sprintf("<h1>Statement for %s</h1>\n", statementData.Customer))
