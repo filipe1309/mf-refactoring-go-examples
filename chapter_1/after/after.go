@@ -207,10 +207,7 @@ func totalVolumeCredits(performances []Performance) int {
 func totalAmount(performances []Performance) int {
 	result := 0
 	for _, perf := range performances {
-		thisAmount, err := amountFor(perf)
-		if err != nil {
-			fmt.Println(err)
-		}
+		thisAmount := perf.Amount
 		result += thisAmount
 	}
 	return result
