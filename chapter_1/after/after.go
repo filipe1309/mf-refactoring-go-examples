@@ -54,12 +54,55 @@ type StatementData struct {
 	TotalVolumeCredits int
 }
 
+type Calculator interface {
+  amount(int) (int, error)
+  volumeCredits(int) int
+}
+
+type TragedyCalculator struct {
+  aPerformance Performance
+	aPlay        Play
+}
+
+func (TragedyCalculator) amount(audience int) (int, error) {
+  result := 40000
+  if audience > 30 {
+    result += 1000 * (audience - 30)
+  }
+  return result, nil
+}
+
+func (TragedyCalculator) volumeCredits(audience int) int {
+  return int(math.Max(float64(audience)-30, 0))
+}
+
+type ComedyCalculator struct {
+  aPerformance Performance
+  aPlay        Play
+}
+
+func (ComedyCalculator) amount(audience int) (int, error) {
+  result := 30000
+  if audience > 20 {
+	result += 10000 + 500*(audience-20)
+  }
+  result += 300 * audience
+  return result, nil
+}
+
+func (ComedyCalculator) volumeCredits(audience int) int {
+  result := int(math.Max(float64(audience)-30, 0))
+  result += int(math.Floor(float64(audience) / 5))
+  return result
+}
+
+
 type PerformanceCalculator struct {
 	aPerformance Performance
 	aPlay        Play
 }
 
-func (p *PerformanceCalculator) amount() (int, error) {
+func (p PerformanceCalculator) amount() (int, error) {
 	var result int
 	switch p.aPlay.Type {
 	case "tragedy":
@@ -81,7 +124,7 @@ func (p *PerformanceCalculator) amount() (int, error) {
 	return result, nil
 }
 
-func (p *PerformanceCalculator) volumeCredits() int {
+func (p PerformanceCalculator) volumeCredits() int {
 	result := int(math.Max(float64(p.aPerformance.Audience)-30, 0))
 	if p.aPlay.Type == "comedy" {
 		result += int(math.Floor(float64(p.aPerformance.Audience) / 5))
@@ -89,8 +132,15 @@ func (p *PerformanceCalculator) volumeCredits() int {
 	return result
 }
 
-func createPerformanceCalculator(aPerformance Performance, aPlay Play) PerformanceCalculator {
-  return PerformanceCalculator{aPerformance: aPerformance, aPlay: aPlay}
+func createPerformanceCalculator(aPerformance Performance, aPlayType string) Calculator {
+	switch aPlayType {
+    case "tragedy":
+        return TragedyCalculator{}
+    case "comedy":
+        return ComedyCalculator{}
+    default:
+        panic(fmt.Sprintf("unknown type: %s", aPlayType))
+    }
 }
 
 func main() {
@@ -148,14 +198,14 @@ func createStatementData(invoice Invoice) StatementData {
 }
 
 func enrichPerformance(aPerformance Performance) (*Performance, error) {
-	var calculator = createPerformanceCalculator(aPerformance, playFor(aPerformance))
-	aPerformance.Play = calculator.aPlay
-	amount, err := calculator.amount()
+	aPerformance.Play = playFor(aPerformance)
+	var calculator = createPerformanceCalculator(aPerformance, aPerformance.Play.Type)
+	amount, err := calculator.amount(aPerformance.Audience)
 	if err != nil {
 		return nil, err
 	}
 	aPerformance.Amount = amount
-	aPerformance.VolumeCredits = calculator.volumeCredits()
+	aPerformance.VolumeCredits = calculator.volumeCredits(aPerformance.Audience)
 	return &aPerformance, nil
 }
 
