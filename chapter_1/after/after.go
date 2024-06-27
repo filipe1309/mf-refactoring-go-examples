@@ -138,7 +138,7 @@ func createStatementData(invoice Invoice) StatementData {
 func enrichPerformance(aPerformance Performance) (*Performance, error) {
 	var calculator = PerformanceCalculator{aPerformance: aPerformance, aPlay: playFor(aPerformance)}
 	aPerformance.Play = calculator.aPlay
-	amount, err := amountFor(aPerformance)
+	amount, err := calculator.amount()
 	if err != nil {
 		return nil, err
 	}
@@ -182,7 +182,7 @@ func renderPlainText(statementData StatementData) (string, error) {
 }
 
 func amountFor(aPerformance Performance) (int, error) {
-  return (&PerformanceCalculator{aPerformance: aPerformance, aPlay: playFor(aPerformance)}).amount()
+	return (&PerformanceCalculator{aPerformance: aPerformance, aPlay: playFor(aPerformance)}).amount()
 }
 
 func playFor(aPerformance Performance) Play {
