@@ -33,7 +33,7 @@ func (t *TragedyCalculator) amount() (int, error) {
 }
 
 func (t *TragedyCalculator) volumeCredits() int {
-	return int(math.Max(float64(t.p.aPerformance.Audience)-30, 0))
+	return t.p.volumeCredits()
 }
 
 func (t *TragedyCalculator) play() Play {
@@ -66,6 +66,10 @@ func (c *ComedyCalculator) play() Play {
 type PerformanceCalculator struct {
 	aPerformance Performance
 	aPlay        Play
+}
+
+func (p *PerformanceCalculator) volumeCredits() int {
+	return int(math.Max(float64(p.aPerformance.Audience)-30, 0))
 }
 
 func createPerformanceCalculator(aPerformance Performance) Calculator {
