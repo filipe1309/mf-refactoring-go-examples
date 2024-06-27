@@ -7,7 +7,7 @@ test:
 # example: make run CHAPTER_NUM=1
 run:
 	@echo "🏁 Running code..."
-	go run chapter_$(CHAPTER_NUM)/after/after.go
+	go run $(shell ls -1 chapter_$(CHAPTER_NUM)/after/*.go | grep -v _test.go)
 
 help:
 	@echo "📖 Available commands:"
