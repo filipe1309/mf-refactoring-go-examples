@@ -25,9 +25,9 @@ func TestMain(m *testing.M) {
 }
 
 var performances = []Performance{
-	{PlayID: "hamlet", Audience: 55, Play: Play{Name: "Hamlet", Type: "tragedy"}},
-	{PlayID: "as-like", Audience: 35, Play: Play{Name: "As You Like It", Type: "comedy"}},
-	{PlayID: "othello", Audience: 40, Play: Play{Name: "Othello", Type: "tragedy"}},
+	{PlayID: "hamlet", Audience: 55, Play: Play{Name: "Hamlet", Type: "tragedy"}, VolumeCredits: 15},
+	{PlayID: "as-like", Audience: 35, Play: Play{Name: "As You Like It", Type: "comedy"}, VolumeCredits: 12},
+	{PlayID: "othello", Audience: 40, Play: Play{Name: "Othello", Type: "tragedy"}, VolumeCredits: 20},
 }
 
 var aPerformance = Performance{

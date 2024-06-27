@@ -103,7 +103,7 @@ func createStatementData(invoice Invoice) StatementData {
 		Customer:           invoice.Customer,
 		Performances:       enrichedPerformances,
 		TotalAmount:        totalAmount(enrichedPerformances),
-		TotalVolumeCredits: totalVolumeCredits(invoice.Performances),
+		TotalVolumeCredits: totalVolumeCredits(enrichedPerformances),
 	}
 	return statementData
 }
@@ -190,7 +190,7 @@ func playFor(aPerformance Performance) Play {
 
 func volumeCreditsFor(aPerformance Performance) int {
 	result := int(math.Max(float64(aPerformance.Audience)-30, 0))
-	if playFor(aPerformance).Type == "comedy" {
+	if aPerformance.Play.Type == "comedy" {
 		result += int(math.Floor(float64(aPerformance.Audience) / 5))
 	}
 	return result
@@ -199,7 +199,7 @@ func volumeCreditsFor(aPerformance Performance) int {
 func totalVolumeCredits(performances []Performance) int {
 	result := 0
 	for _, perf := range performances {
-		result += volumeCreditsFor(perf)
+		result += perf.VolumeCredits
 	}
 	return result
 }
