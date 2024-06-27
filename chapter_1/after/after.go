@@ -55,92 +55,69 @@ type StatementData struct {
 }
 
 type Calculator interface {
-  amount(int) (int, error)
-  volumeCredits(int) int
+	amount() (int, error)
+	volumeCredits() int
+	play() Play
 }
 
 type TragedyCalculator struct {
-  aPerformance Performance
-	aPlay        Play
+	p *PerformanceCalculator
 }
 
-func (TragedyCalculator) amount(audience int) (int, error) {
-  result := 40000
-  if audience > 30 {
-    result += 1000 * (audience - 30)
-  }
-  return result, nil
+func (t *TragedyCalculator) amount() (int, error) {
+	result := 40000
+	if t.p.aPerformance.Audience > 30 {
+		result += 1000 * (t.p.aPerformance.Audience - 30)
+	}
+	return result, nil
 }
 
-func (TragedyCalculator) volumeCredits(audience int) int {
-  return int(math.Max(float64(audience)-30, 0))
+func (t *TragedyCalculator) volumeCredits() int {
+	return int(math.Max(float64(t.p.aPerformance.Audience)-30, 0))
+}
+
+func (t *TragedyCalculator) play() Play {
+	return t.p.aPlay
 }
 
 type ComedyCalculator struct {
-  aPerformance Performance
-  aPlay        Play
+	p *PerformanceCalculator
 }
 
-func (ComedyCalculator) amount(audience int) (int, error) {
-  result := 30000
-  if audience > 20 {
-	result += 10000 + 500*(audience-20)
-  }
-  result += 300 * audience
-  return result, nil
+func (c *ComedyCalculator) amount() (int, error) {
+	result := 30000
+	if c.p.aPerformance.Audience > 20 {
+		result += 10000 + 500*(c.p.aPerformance.Audience-20)
+	}
+	result += 300 * c.p.aPerformance.Audience
+	return result, nil
 }
 
-func (ComedyCalculator) volumeCredits(audience int) int {
-  result := int(math.Max(float64(audience)-30, 0))
-  result += int(math.Floor(float64(audience) / 5))
-  return result
+func (c *ComedyCalculator) volumeCredits() int {
+	result := int(math.Max(float64(c.p.aPerformance.Audience)-30, 0))
+	result += int(math.Floor(float64(c.p.aPerformance.Audience) / 5))
+	return result
 }
 
+func (c *ComedyCalculator) play() Play {
+	return c.p.aPlay
+}
 
 type PerformanceCalculator struct {
 	aPerformance Performance
 	aPlay        Play
 }
 
-func (p PerformanceCalculator) amount() (int, error) {
-	var result int
-	switch p.aPlay.Type {
+func createPerformanceCalculator(aPerformance Performance) Calculator {
+	aPlay := playFor(aPerformance)
+	switch aPlay.Type {
 	case "tragedy":
-		result = 40000
-		if p.aPerformance.Audience > 30 {
-			result += 1000 * (p.aPerformance.Audience - 30)
-		}
+		return &TragedyCalculator{&PerformanceCalculator{aPerformance, aPlay}}
 	case "comedy":
-		result = 30000
-		if p.aPerformance.Audience > 20 {
-			result += 10000 + 500*(p.aPerformance.Audience-20)
-		}
-		result += 300 * p.aPerformance.Audience
-
+		return &ComedyCalculator{&PerformanceCalculator{aPerformance, aPlay}}
 	default:
-		return result, fmt.Errorf("error unknown performance type %s", p.aPerformance.Play.Type)
+		panic(fmt.Sprintf("unknown type: %s", aPlay.Type))
 	}
-
-	return result, nil
-}
-
-func (p PerformanceCalculator) volumeCredits() int {
-	result := int(math.Max(float64(p.aPerformance.Audience)-30, 0))
-	if p.aPlay.Type == "comedy" {
-		result += int(math.Floor(float64(p.aPerformance.Audience) / 5))
-	}
-	return result
-}
-
-func createPerformanceCalculator(aPerformance Performance, aPlayType string) Calculator {
-	switch aPlayType {
-    case "tragedy":
-        return TragedyCalculator{}
-    case "comedy":
-        return ComedyCalculator{}
-    default:
-        panic(fmt.Sprintf("unknown type: %s", aPlayType))
-    }
 }
 
 func main() {
@@ -198,14 +175,14 @@ func createStatementData(invoice Invoice) StatementData {
 }
 
 func enrichPerformance(aPerformance Performance) (*Performance, error) {
-	aPerformance.Play = playFor(aPerformance)
-	var calculator = createPerformanceCalculator(aPerformance, aPerformance.Play.Type)
-	amount, err := calculator.amount(aPerformance.Audience)
+	var calculator = createPerformanceCalculator(aPerformance)
+	aPerformance.Play = calculator.play()
+	amount, err := calculator.amount()
 	if err != nil {
 		return nil, err
 	}
 	aPerformance.Amount = amount
-	aPerformance.VolumeCredits = calculator.volumeCredits(aPerformance.Audience)
+	aPerformance.VolumeCredits = calculator.volumeCredits()
 	return &aPerformance, nil
 }
 
@@ -243,10 +220,6 @@ func renderPlainText(statementData StatementData) (string, error) {
 	return result.String(), nil
 }
 
-func amountFor(aPerformance Performance) (int, error) {
-	return (&PerformanceCalculator{aPerformance: aPerformance, aPlay: playFor(aPerformance)}).amount()
-}
-
 func playFor(aPerformance Performance) Play {
 	playsFile, err := os.ReadFile("chapter_1/after/plays.json")
 	if err != nil {
@@ -258,10 +231,6 @@ func playFor(aPerformance Performance) Play {
 		fmt.Println(err)
 	}
 	return plays[aPerformance.PlayID]
-}
-
-func volumeCreditsFor(aPerformance Performance) int {
-	return (&PerformanceCalculator{aPerformance: aPerformance, aPlay: playFor(aPerformance)}).volumeCredits()
 }
 
 func totalVolumeCredits(performances []Performance) int {

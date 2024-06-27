@@ -52,7 +52,8 @@ func TestTotalVolumeCredits(t *testing.T) {
 
 func TestVolumeCreditsFor(t *testing.T) {
 	expected := 25
-	result := volumeCreditsFor(aPerformance)
+	var calculator = createPerformanceCalculator(aPerformance)
+	result := calculator.volumeCredits()
 	if result != expected {
 		t.Errorf("expected %v but got %v", expected, result)
 	}
@@ -68,7 +69,8 @@ func TestPlayFor(t *testing.T) {
 
 func TestAmountFor(t *testing.T) {
 	expected := 65000
-	result, _ := amountFor(aPerformance)
+	var calculator = createPerformanceCalculator(aPerformance)
+	result, _ := calculator.amount()
 	if result != expected {
 		t.Errorf("expected %v but got %v", expected, result)
 	}
