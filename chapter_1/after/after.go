@@ -54,6 +54,33 @@ type StatementData struct {
 	TotalVolumeCredits int
 }
 
+type PerformanceCalculator struct {
+  aPerformance Performance
+  aPlay Play
+}
+
+func (p *PerformanceCalculator) amount() (int, error) {
+	var result int
+	switch p.aPlay.Type {
+	case "tragedy":
+		result = 40000
+		if p.aPerformance.Audience > 30 {
+			result += 1000 * (p.aPerformance.Audience - 30)
+		}
+	case "comedy":
+		result = 30000
+		if p.aPerformance.Audience > 20 {
+			result += 10000 + 500*(p.aPerformance.Audience-20)
+		}
+		result += 300 * p.aPerformance.Audience
+
+	default:
+		return result, fmt.Errorf("error unknown performance type %s", p.aPerformance.Play.Type)
+	}
+
+	return result, nil
+}
+
 func main() {
 	invoiceFile, err := os.ReadFile("chapter_1/after/invoices.json")
 	if err != nil {
@@ -109,6 +136,7 @@ func createStatementData(invoice Invoice) StatementData {
 }
 
 func enrichPerformance(aPerformance Performance) (*Performance, error) {
+  // var calculator = PerformanceCalculator{aPerformance: aPerformance, aPlay: playFor(aPerformance)}
 	aPerformance.Play = playFor(aPerformance)
 	amount, err := amountFor(aPerformance)
 	if err != nil {
