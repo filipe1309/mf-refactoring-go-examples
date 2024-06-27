@@ -108,15 +108,15 @@ func createStatementData(invoice Invoice) StatementData {
 	return statementData
 }
 
-func enrichPerformance(performance Performance) (*Performance, error) {
-	performance.Play = playFor(performance)
-	amount, err := amountFor(performance)
+func enrichPerformance(aPerformance Performance) (*Performance, error) {
+	aPerformance.Play = playFor(aPerformance)
+	amount, err := amountFor(aPerformance)
 	if err != nil {
 		return nil, err
 	}
-	performance.Amount = amount
-	performance.VolumeCredits = volumeCreditsFor(performance)
-	return &performance, nil
+	aPerformance.Amount = amount
+	aPerformance.VolumeCredits = volumeCreditsFor(aPerformance)
+	return &aPerformance, nil
 }
 
 func statementHtml(invoice Invoice) (string, error) {
