@@ -10,7 +10,7 @@
 
 ## 💬 About
 
-This project was developed following the Martin Fowler's "[Refactoring](https://www.amazon.com/Refactoring-Improving-Existing-Addison-Wesley-Signature/dp/0134757599) book".
+This project was developed following the Martin Fowler's "[Refactoring](https://www.amazon.com/Refactoring-Improving-Existing-Addison-Wesley-Signature/dp/0134757599) 2nd Edition book".
 
 ## :computer: Technologies
 
