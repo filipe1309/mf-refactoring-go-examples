@@ -81,6 +81,14 @@ func (p *PerformanceCalculator) amount() (int, error) {
 	return result, nil
 }
 
+func (p *PerformanceCalculator) volumeCredits() int {
+  result := int(math.Max(float64(p.aPerformance.Audience)-30, 0))
+  if p.aPlay.Type == "comedy" {
+    result += int(math.Floor(float64(p.aPerformance.Audience) / 5))
+  }
+  return result
+}
+
 func main() {
 	invoiceFile, err := os.ReadFile("chapter_1/after/invoices.json")
 	if err != nil {
@@ -143,7 +151,7 @@ func enrichPerformance(aPerformance Performance) (*Performance, error) {
 		return nil, err
 	}
 	aPerformance.Amount = amount
-	aPerformance.VolumeCredits = volumeCreditsFor(aPerformance)
+	aPerformance.VolumeCredits = calculator.volumeCredits()
 	return &aPerformance, nil
 }
 
@@ -199,11 +207,7 @@ func playFor(aPerformance Performance) Play {
 }
 
 func volumeCreditsFor(aPerformance Performance) int {
-	result := int(math.Max(float64(aPerformance.Audience)-30, 0))
-	if aPerformance.Play.Type == "comedy" {
-		result += int(math.Floor(float64(aPerformance.Audience) / 5))
-	}
-	return result
+	return (&PerformanceCalculator{aPerformance: aPerformance, aPlay: playFor(aPerformance)}).volumeCredits()
 }
 
 func totalVolumeCredits(performances []Performance) int {
