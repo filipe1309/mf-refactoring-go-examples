@@ -82,11 +82,15 @@ func (p *PerformanceCalculator) amount() (int, error) {
 }
 
 func (p *PerformanceCalculator) volumeCredits() int {
-  result := int(math.Max(float64(p.aPerformance.Audience)-30, 0))
-  if p.aPlay.Type == "comedy" {
-    result += int(math.Floor(float64(p.aPerformance.Audience) / 5))
-  }
-  return result
+	result := int(math.Max(float64(p.aPerformance.Audience)-30, 0))
+	if p.aPlay.Type == "comedy" {
+		result += int(math.Floor(float64(p.aPerformance.Audience) / 5))
+	}
+	return result
+}
+
+func createPerformanceCalculator(aPerformance Performance, aPlay Play) PerformanceCalculator {
+  return PerformanceCalculator{aPerformance: aPerformance, aPlay: aPlay}
 }
 
 func main() {
@@ -144,7 +148,7 @@ func createStatementData(invoice Invoice) StatementData {
 }
 
 func enrichPerformance(aPerformance Performance) (*Performance, error) {
-	var calculator = PerformanceCalculator{aPerformance: aPerformance, aPlay: playFor(aPerformance)}
+	var calculator = createPerformanceCalculator(aPerformance, playFor(aPerformance))
 	aPerformance.Play = calculator.aPlay
 	amount, err := calculator.amount()
 	if err != nil {
