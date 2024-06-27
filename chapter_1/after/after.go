@@ -55,8 +55,8 @@ type StatementData struct {
 }
 
 type PerformanceCalculator struct {
-  aPerformance Performance
-  aPlay Play
+	aPerformance Performance
+	aPlay        Play
 }
 
 func (p *PerformanceCalculator) amount() (int, error) {
@@ -136,8 +136,8 @@ func createStatementData(invoice Invoice) StatementData {
 }
 
 func enrichPerformance(aPerformance Performance) (*Performance, error) {
-  // var calculator = PerformanceCalculator{aPerformance: aPerformance, aPlay: playFor(aPerformance)}
-	aPerformance.Play = playFor(aPerformance)
+	var calculator = PerformanceCalculator{aPerformance: aPerformance, aPlay: playFor(aPerformance)}
+	aPerformance.Play = calculator.aPlay
 	amount, err := amountFor(aPerformance)
 	if err != nil {
 		return nil, err
@@ -182,25 +182,7 @@ func renderPlainText(statementData StatementData) (string, error) {
 }
 
 func amountFor(aPerformance Performance) (int, error) {
-	var result int
-	switch aPerformance.Play.Type {
-	case "tragedy":
-		result = 40000
-		if aPerformance.Audience > 30 {
-			result += 1000 * (aPerformance.Audience - 30)
-		}
-	case "comedy":
-		result = 30000
-		if aPerformance.Audience > 20 {
-			result += 10000 + 500*(aPerformance.Audience-20)
-		}
-		result += 300 * aPerformance.Audience
-
-	default:
-		return result, fmt.Errorf("error unknown performance type %s", aPerformance.Play.Type)
-	}
-
-	return result, nil
+  return (&PerformanceCalculator{aPerformance: aPerformance, aPlay: playFor(aPerformance)}).amount()
 }
 
 func playFor(aPerformance Performance) Play {
