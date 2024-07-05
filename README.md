@@ -4,7 +4,6 @@
 # <p align="center">Refactoring with Go</p>
 
 <p align="center">
-    <img src="https://img.shields.io/badge/Tools-Docker-informational?style=flat-square&logo=docker&color=2496ED" alt="Docker" />
     <img src="https://img.shields.io/badge/Code-Go-informational?style=flat-square&logo=go&color=00ADD8" alt="Go" />
 </p>
 
@@ -15,15 +14,12 @@ This project was developed following the Martin Fowler's "[Refactoring](https://
 ## :computer: Technologies
 
 - [Go](https://golang.org/)
-- [Docker](https://www.docker.com/)
-- [Docker Compose](https://docs.docker.com/compose/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## :scroll: Requirements
 
-- [Docker](https://www.docker.com/)
-- [Docker Compose](https://docs.docker.com/compose/)
+- [Go](https://golang.org/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -54,6 +50,7 @@ make run CHAPTER_NUM=1
 ```sh
 make test
 ```
+> Run all tests
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
