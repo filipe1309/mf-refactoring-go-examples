@@ -14,6 +14,7 @@ This project was developed following the Martin Fowler's "[Refactoring](https://
 ## :computer: Technologies
 
 - [Go](https://golang.org/)
+- [Testify](https://pkg.go.dev/github.com/stretchr/testify/assert)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -94,11 +95,9 @@ Please make sure to update tests as appropriate. -->
 
 ## :clap: Acknowledgments
 
-- [AlgoExpert](https://www.algoexpert.io/)
+- [Martin Fowler's Refactoring](https://www.amazon.com/Refactoring-Improving-Existing-Addison-Wesley-Signature/dp/0134757599)
 - [ShubcoGen Template™](https://github.com/filipe1309/shubcogen-template)
 - [refactoring-go](https://github.com/Rosalita/refactoring-go)
-- [Martin Fowler's Refactoring](https://www.amazon.com/Refactoring-Improving-Existing-Addison-Wesley-Signature/dp/0134757599)
-- [Testify](https://pkg.go.dev/github.com/stretchr/testify/assert)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
