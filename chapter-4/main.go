@@ -8,11 +8,11 @@ import (
 )
 
 type Province struct {
-	name string
-	producers []Producer
+	name            string
+	producers       []Producer
 	totalProduction int
-	demand int
-	price int
+	demand          int
+	price           int
 }
 
 func (p *Province) getName() string {
@@ -47,7 +47,7 @@ func (p *Province) setPrice(price string) {
 	if err != nil {
 		panic(err)
 	}
-	p.price = i 
+	p.price = i
 }
 
 func (p *Province) getShortfall() int {
@@ -83,10 +83,10 @@ func (p *Province) addProducer(producer Producer) {
 }
 
 type Producer struct {
-	name string
-	cost int
+	name       string
+	cost       int
 	production int
-	province Province
+	province   Province
 }
 
 func (p *Producer) getName() string {
@@ -141,5 +141,3 @@ func main() {
 	fmt.Println("\tShortfall:\t", asia.getShortfall())
 	fmt.Println("\tProfit:\t\t", asia.getProfit())
 }
-
-
