@@ -11,6 +11,8 @@
 
 This project was developed following the Martin Fowler's "[Refactoring](https://www.amazon.com/Refactoring-Improving-Existing-Addison-Wesley-Signature/dp/0134757599) 2nd Edition book".
 
+Notes taken during the course are in the [notes.md](notes.md) file.
+
 ## :computer: Technologies
 
 - [Go](https://golang.org/)
