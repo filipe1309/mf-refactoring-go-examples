@@ -117,7 +117,7 @@ func enrichPerformance(aPerformance Performance) (*Performance, error) {
 }
 
 func playFor(aPerformance Performance) Play {
-	playsFile, err := os.ReadFile("chapter_1/after/plays.json")
+	playsFile, err := os.ReadFile("chapter-1/after/plays.json")
 	if err != nil {
 		fmt.Println(err)
 	}
