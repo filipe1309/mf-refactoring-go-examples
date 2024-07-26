@@ -42,22 +42,22 @@ cd mf-refactoring-go-examples
 make run CHAPTER_NUM=1
 ```
 > Replace `CHAPTER_NUM` value with the desired chapter number
-> Verify the result in the terminal
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## :white_check_mark: Tests
 
+Run all tests:
 ```sh
 make test-all
 ```
-> Run all tests
 
+Run tests for a specific chapter:
 ```sh
 make test CHAPTER_NUM=1
 ```
 > Replace `CHAPTER_NUM` value with the desired chapter number
-> Run tests for a specific chapter
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
