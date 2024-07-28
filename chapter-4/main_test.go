@@ -47,3 +47,13 @@ func TestChangeProduction(t *testing.T) {
 	assert.Equal(t, -6, asia.getShortfall())
 	assert.Equal(t, 292, asia.getProfit())
 }
+
+func TestNoProducers(t *testing.T) {
+	asia := &Province{name: "No Producers", demand: 30, price: 20}
+	t.Run("Shortfall", func(t *testing.T) {
+		assert.Equal(t, 30, asia.getShortfall())
+	})
+	t.Run("Profit", func(t *testing.T) {
+		assert.Equal(t, 0, asia.getProfit())
+	})
+}
