@@ -14,12 +14,11 @@ func setup() {
 }
 
 func setupTest() func() {
-	// Setup code here
 	setup()
-	// tear down later
-	return func() {
-		// tear-down code here
+	tearDown := func() {
+		// teardown code here
 	}
+	return tearDown
 }
 
 // This function is called before the test starts and after the test ends
@@ -31,29 +30,31 @@ func TestMain(m *testing.M) {
 	fmt.Println("After All tests")
 }
 
-func TestShortfall(t *testing.T) {
-	defer setupTest()()
-	assert.Equal(t, 5, asia.getShortfall())
-}
+func TestProvince(t *testing.T) {
+	t.Run("shortfall", func(t *testing.T) {
+		defer setupTest()()
+		assert.Equal(t, 5, asia.getShortfall())
+	})
 
-func TestProfit(t *testing.T) {
-	defer setupTest()()
-	assert.Equal(t, 230, asia.getProfit())
-}
+	t.Run("profit", func(t *testing.T) {
+		defer setupTest()()
+		assert.Equal(t, 230, asia.getProfit())
+	})
 
-func TestChangeProduction(t *testing.T) {
-	defer setupTest()()
-	asia.producers[0].setProduction("20")
-	assert.Equal(t, -6, asia.getShortfall())
-	assert.Equal(t, 292, asia.getProfit())
+	t.Run("change production", func(t *testing.T) {
+		defer setupTest()()
+		asia.producers[0].setProduction("20")
+		assert.Equal(t, -6, asia.getShortfall())
+		assert.Equal(t, 292, asia.getProfit())
+	})
 }
 
 func TestNoProducers(t *testing.T) {
 	asia := &Province{name: "No Producers", demand: 30, price: 20}
-	t.Run("Shortfall", func(t *testing.T) {
+	t.Run("shortfall", func(t *testing.T) {
 		assert.Equal(t, 30, asia.getShortfall())
 	})
-	t.Run("Profit", func(t *testing.T) {
+	t.Run("profit", func(t *testing.T) {
 		assert.Equal(t, 0, asia.getProfit())
 	})
 }
