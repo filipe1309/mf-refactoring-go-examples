@@ -31,12 +31,13 @@ func (p *Province) getDemand() int {
 	return p.demand
 }
 
-func (p *Province) setDemand(demand string) {
+func (p *Province) setDemand(demand string) error {
 	i, err := strconv.Atoi(demand)
 	if err != nil {
-		panic(err)
+		return err
 	}
 	p.demand = i
+	return nil
 }
 
 func (p *Province) getPrice() int {
