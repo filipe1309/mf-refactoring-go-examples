@@ -61,11 +61,25 @@ func (p *Province) getProfit() int {
 func (p *Province) demandCost() int {
 	var remainingDemand = p.demand
 	var result int
-	for _, producer := range p.producers {
-		var contribution = int(math.Min(float64(remainingDemand), float64(producer.getProduction())))
-		remainingDemand -= contribution
-		result += contribution * producer.getCost()
+
+	// sort producers by cost
+	sortedProducers := make([]Producer, len(p.producers))
+	copy(sortedProducers, p.producers)
+	for i := 0; i < len(sortedProducers); i++ {
+		for j := i + 1; j < len(sortedProducers); j++ {
+			if sortedProducers[i].cost > sortedProducers[j].cost {
+				sortedProducers[i], sortedProducers[j] = sortedProducers[j], sortedProducers[i]
+			}
+		}
 	}
+
+	// calculate cost
+	for _, producer := range sortedProducers {
+		contribution := int(math.Min(float64(remainingDemand), float64(producer.production)))
+		remainingDemand -= contribution
+		result += contribution * producer.cost
+	}
+
 	return result
 }
 
@@ -86,7 +100,7 @@ type Producer struct {
 	name       string
 	cost       int
 	production int
-	province   Province
+	province   *Province
 }
 
 func (p *Producer) getName() string {
@@ -120,14 +134,14 @@ func (p *Producer) setProduction(amountStr string) {
 }
 
 func (p *Producer) getProvince() Province {
-	return p.province
+	return *p.province
 }
 
-func sampleProvinceData() Province {
-	province := Province{name: "Asia"}
-	province.addProducer(Producer{name: "Byzantium", cost: 10, production: 9})
-	province.addProducer(Producer{name: "Attalia", cost: 12, production: 10})
-	province.addProducer(Producer{name: "Sinope", cost: 10, production: 6})
+func sampleProvinceData() *Province {
+	province := &Province{name: "Asia"}
+	province.addProducer(Producer{name: "Byzantium", cost: 10, production: 9, province: province})
+	province.addProducer(Producer{name: "Attalia", cost: 12, production: 10, province: province})
+	province.addProducer(Producer{name: "Sinope", cost: 10, production: 6, province: province})
 	province.setDemand("30")
 	province.setPrice("20")
 	return province
@@ -135,7 +149,6 @@ func sampleProvinceData() Province {
 
 func main() {
 	fmt.Println("Production Plan")
-
 	asia := sampleProvinceData()
 	fmt.Println("\nProvince:", asia.getName())
 	fmt.Println("\tShortfall:\t", asia.getShortfall())
