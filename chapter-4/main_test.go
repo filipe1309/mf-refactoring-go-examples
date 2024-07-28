@@ -61,6 +61,15 @@ func TestProvince(t *testing.T) {
 		assert.Equal(t, -26, asia.getShortfall())
 		assert.Equal(t, -10, asia.getProfit())
 	})
+
+	t.Run("empty string demand", func(t *testing.T) {
+		defer setupTest()()
+		err := asia.setDemand("")
+		assert.NotNil(t, err)
+		assert.Equal(t, 30, asia.getDemand())
+		assert.Equal(t, 5, asia.getShortfall())
+		assert.Equal(t, 230, asia.getProfit())
+	})
 }
 
 func TestNoProducers(t *testing.T) {
